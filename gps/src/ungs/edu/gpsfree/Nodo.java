@@ -136,8 +136,8 @@ public class Nodo {
 
 		// Rotar los vectores
 		// supongo la coordenada j de ajuste
-		Coordenada j = new Coordenada(3.0, 0.5);
-
+		Coordenada j = new Coordenada(-2.0, 4.0);
+		
 		Double distanciaOJ = Algoritmos.distanciaEntrePuntos(C1, j);
 		Double anguloDeRotacionAlphaJ = Algoritmos.reglaDelCoceno(j.getX(),
 				distanciaOJ, j.getY());
@@ -161,23 +161,9 @@ public class Nodo {
 				tresVecinosAdentro.get(0).getCoordenada().getY(), distanciak,
 				tresVecinosAdentro.get(0).getCoordenada().getX());
 
-		double anguloDeRotacion = 0.0;
+		double anguloDeRotacion = obtenerAnguloDeRotacion(tresVecinosAdentro.get(0).getCoordenada(), j);
 
-		if (anguloDeRotacionAlphaJ - anguloDeRotacionAlphak < Math.PI
-				&& (anguloDeRotacionBethaJ - anguloDeRotacionBetha) > Math.PI
-				|| anguloDeRotacionAlphaJ - anguloDeRotacionAlphak > Math.PI
-				&& (anguloDeRotacionBethaJ - anguloDeRotacionBetha) < Math.PI) {
-			anguloDeRotacion = anguloDeRotacionBetha - anguloDeRotacionAlphak
-					+ Math.PI;
-		} else if (anguloDeRotacionAlphaJ - anguloDeRotacionAlphak < Math.PI
-				&& (anguloDeRotacionBethaJ - anguloDeRotacionBetha) < Math.PI
-				|| anguloDeRotacionAlphaJ - anguloDeRotacionAlphak > Math.PI
-				&& (anguloDeRotacionBethaJ - anguloDeRotacionBetha) > Math.PI) {
-			anguloDeRotacion = anguloDeRotacionBetha + anguloDeRotacionAlphak;
-		}
-
-		// Double anguloDeRotacion= 90 * Math.PI/180.0;
-
+		
 		C1 = Algoritmos.rotarCoordenada(C1, anguloDeRotacion);
 		C2 = Algoritmos.rotarCoordenada(C2, anguloDeRotacion);
 		C3 = Algoritmos.rotarCoordenada(C3, anguloDeRotacion);
@@ -203,4 +189,40 @@ public class Nodo {
 		System.out.println("C3 " + C3);
 	}
 
+	
+	private Double obtenerAnguloDeRotacion(Coordenada k, Coordenada j){
+		Double result=null;
+		
+		
+		Double dalphaj = Algoritmos.distanciaEntrePuntos(new Coordenada(0.0, 0.0), j);
+		double alphaj= Algoritmos.reglaDelCoceno(j.getX(),
+				dalphaj, j.getY());
+		
+		Double dalphak = Algoritmos.distanciaEntrePuntos(new Coordenada(0.0, 0.0), k);
+		double alphak= Algoritmos.reglaDelCoceno(k.getX(),
+				dalphak, k.getY());
+		
+		
+		Double dbethai = Algoritmos.distanciaEntrePuntos(new Coordenada(0.0, 0.0), k);
+		double bethai= Algoritmos.reglaDelCoceno(k.getX(),
+				dbethai, k.getY());
+		
+		//falta calcular bethaj
+		Double bethaj=null;
+		
+		if (alphaj - alphak < Math.PI
+				&& (bethaj - bethai) > Math.PI
+				|| alphaj - alphak > Math.PI
+				&& (bethaj - bethai) < Math.PI) {
+			result = bethai - alphak
+					+ Math.PI;
+		} else if (alphaj - alphak < Math.PI
+				&& (bethaj - bethai) < Math.PI
+				|| alphaj - alphak > Math.PI
+				&& (bethaj - bethai) > Math.PI) {
+			result = bethai + alphak;
+		}
+		
+		return result;
+	}
 }
